@@ -1,0 +1,26 @@
+from pybloomfilter import BloomFilter
+from pyccn import Key
+import random, sys, threading
+
+count = 2000
+keyLen = 2048
+dir_base = '/home/enzo/CCNx/python_examples/bloomfilter/keyDigest'
+# key digest length is 32 bytes
+
+def write_keyDigest(keyDigestFile):
+	FILE = open(keyDigestFile, 'w')
+	
+	for i in range(count):
+		key = Key()
+		publickeyDigest = key.generateRSA(keyLen)
+		FILE.write(str(publickeyDigest))
+		print threading.currentThread().getName(), i
+	
+	FILE.close()
+
+threads = []
+for i in range(10):
+	filedir = dir_base + str(i)
+	t = threading.Thread(target=write_keyDigest, args=(filedir, ))
+	threads.append(t)
+	t.start()

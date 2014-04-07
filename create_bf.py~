@@ -1,0 +1,34 @@
+from pybloomfilter import BloomFilter
+from pyccn import Key
+import random, sys, threading
+
+count = 1000000
+error_rate = 0.01
+keyLen = 2048
+# key digest length is 32 bytes
+
+bf = BloomFilter(count, error_rate, 'filter.bloom')
+keyDigest_list = []
+
+FILE = open('/home/enzo/CCNx/python_projects/bloomfilter/PublicKeyDigest', 'r')
+
+for i in range(count):
+	keyDigest = FILE.read(32)
+	keyDigest_list.append(keyDigest)
+	
+FILE.close()
+	
+for publicKeyID in keyDigest_list:
+	bf.add(publicKeyID)
+
+print "length of list is %d" % len(keyDigest_list)
+
+#randindex = random.randint(0, count-1)
+#rint "randindex is %s" % randindex
+#publicKeyID = keyDigest_list[randindex]
+#if publicKeyID in bf:
+#	print "True"
+#else:
+#	print "False"
+
+

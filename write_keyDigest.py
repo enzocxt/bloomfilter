@@ -1,0 +1,20 @@
+import random, sys
+from Crypto.Hash import SHA256
+
+keyDigest_list = []
+count = 1000000
+HASH = SHA256.new()
+
+for i in range(count):
+	key = random.randint(2**2047, 2**2048-1)
+	HASH.update(str(key))
+	keyDigest = HASH.digest()
+	keyDigest_list.append(keyDigest)
+	if i%10000 == 0: print i
+
+FILE = open('/home/enzo/CCNx/python_projects/bloomfilter/PublicKeyDigest', 'w')
+
+for i in range(count):
+	FILE.write(keyDigest_list[i])
+
+FILE.close()
